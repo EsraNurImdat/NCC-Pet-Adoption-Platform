@@ -27,7 +27,7 @@ const customTheme = createTheme({
         <AppBar position="static">
         <Toolbar>
        
-        <ListItemButton component={Link} to="/table">
+        <ListItemButton component={Link} to="/userInfo">
           <ListItemIcon>
             <SentimentSatisfiedAltOutlinedIcon/>
           </ListItemIcon>
@@ -41,7 +41,7 @@ const customTheme = createTheme({
           <ListItemText primary="Animals" />
         </ListItemButton>
        
-        <ListItemButton component={Link} to="/adaoptionForm">
+        <ListItemButton component={Link} to="/adoptionform">
           <ListItemIcon>
             <VolunteerActivismOutlinedIcon/>
           </ListItemIcon>

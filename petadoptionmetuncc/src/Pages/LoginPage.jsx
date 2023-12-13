@@ -9,6 +9,7 @@ const customTheme = createTheme({
       main: '#ad1457',
     },
   },
+  
 });
 
 export default function SignInSide() {

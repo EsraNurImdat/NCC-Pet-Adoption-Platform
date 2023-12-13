@@ -13,6 +13,7 @@ import AppBarFunction from './AppBar';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 
@@ -64,7 +65,25 @@ const rows = [
   createData('Zeki', 'Alp', 15, 'zeki@email.com','Male'),
   createData('NUr', 'Alp', 10, 'nur@email.com','Female'),
 ];
-
+const customTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#ad1457', // Purple color
+    },
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          backgroundImage: 'url("https://s.tmimgcdn.com/scr/800x500/296200/premium-vektor-arkaplan-resimleri--yuksek-kaliteli-arkaplan--modern-hd-arka-plan-goruntuleri_296286-original.jpg")', 
+          backgroundSize: 'cover',
+          minHeight: '1000px',
+        },
+      },
+    },
+  },
+  
+});
 export default function UserTable() {
     const userInformation = [
       { label: 'First Name', value: "firstName" },
@@ -75,10 +94,13 @@ export default function UserTable() {
       { label: 'Address', value: "address" },
     ];
   
-    return (
+    return ( <Box sx={{backgroundImage:'url("https://s.tmimgcdn.com/scr/800x500/296200/premium-vektor-arkaplan-resimleri--yuksek-kaliteli-arkaplan--modern-hd-arka-plan-goruntuleri_296286-original.jpg")',backgroundSize: 'cover',
+          minHeight: '1000px',}}>
+      <ThemeProvider theme={customTheme}>
+       
       <div style={{ textAlign: 'center' }}>
         <AppBarFunction />
-        <Box sx={{ bgcolor: 'background.paper', pt: 4, pb: 6 }}>
+        <Box sx={{ pt: 4, pb: 6 }}>
           <Container maxWidth="md">
             <Typography style={{ marginBottom: '-8rem' }} component="h2" variant="h3" align="center" color="#ad1457" gutterBottom>
               User Information
@@ -103,87 +125,7 @@ export default function UserTable() {
             </TableBody>
           </Table>
         </TableContainer>
-      </div>
+      </div></ThemeProvider></Box>
     );
   }
-    /*
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [sortedRows, setSortedRows] = useState([...rows]);
-  const [sortDirection, setSortDirection] = useState(undefined);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  const handleSortByAge = () => {
-    if (sortDirection === 'asc') {
-      setSortDirection('desc');
-      setSortedRows([...rows].sort((a, b) => b.age - a.age));
-    } else {
-      setSortDirection('asc');
-      setSortedRows([...rows].sort((a, b) => a.age - b.age));
-    }
-  };
-
-  return (
    
-    <Paper style={{ width: '100%', overflow: 'hidden' }}>
-        <AppBarFunction/>
-      <TableContainer style={{ maxHeight: 'calc(100vh - 64px)' }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ top: 57, minWidth: column.minWidth, fontWeight: 'bold', padding: '5px 30px' }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {sortedRows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.email}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align} style={{ padding: '18px 40px' }}>
-                          {value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={sortedRows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      <TableCell>
-        <button onClick={handleSortByAge}>Sort By Age</button>
-      </TableCell>
-    </Paper>
-    
-  );
-}
-*/

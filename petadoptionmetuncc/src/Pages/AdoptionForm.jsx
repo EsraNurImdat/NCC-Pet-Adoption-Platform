@@ -16,6 +16,7 @@ import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import PhoneIcon from '@mui/icons-material/Phone';
 import PetsIcon from '@mui/icons-material/Pets';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AppBarFunction from "./AppBar";
 
 const customTheme = createTheme({
     palette: {
@@ -23,9 +24,20 @@ const customTheme = createTheme({
         main: '#ad1457', 
       },
     },
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            backgroundImage: 'url("https://s.tmimgcdn.com/scr/800x500/296200/premium-vektor-arkaplan-resimleri--yuksek-kaliteli-arkaplan--modern-hd-arka-plan-goruntuleri_296286-original.jpg")', 
+            backgroundSize: 'cover',
+            minHeight: '1000px',
+          },
+        },
+      },
+    },
   });
 
-export default function AdaptionForm(
+export default function AdoptionForm(
 ) {
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -44,7 +56,9 @@ export default function AdaptionForm(
 
   return (
     <ThemeProvider theme={customTheme}>
+      <Box>
     <React.Fragment>
+    <AppBarFunction />
       <Container component="main" maxWidth="lg">
         <Box
           sx={{
@@ -53,6 +67,7 @@ export default function AdaptionForm(
         >
           <Grid container>
             <CssBaseline />
+            
             <Grid item xs={32} sm={18} md={15} component={Paper} elevation={6} square>
               <Box  component="form" noValidate onSubmit={handleSubmit}
                 sx={{
@@ -213,6 +228,7 @@ export default function AdaptionForm(
         </Box>
       </Container>
     </React.Fragment>
+    </Box>
     </ThemeProvider>
   );
 }
