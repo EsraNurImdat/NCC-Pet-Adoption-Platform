@@ -79,7 +79,7 @@ export default function AdoptionForm(
                 }}
               >
                 <Typography component="h1" variant="h4" marginBottom="10px" color="#ad1457">
-                  Pet Adaption Form
+                  Pet Adoption Form
                 </Typography>
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
@@ -181,13 +181,13 @@ export default function AdoptionForm(
                     </Grid>
 
                     <Grid item xs={12}>
-                    <InputLabel >Name of pet you're applying for:</InputLabel>
+                    <InputLabel >ID of pet you're applying for:</InputLabel>
                       <TextField
                         required
-                        id="animalname"
-                        name="animalname"
+                        id="animalID"
+                        name="animalID"
                         fullWidth
-                        autoComplete="animalname"
+                        autoComplete="animalID"
                         variant="standard"
                         color="warning"
                         InputProps={{
@@ -216,7 +216,7 @@ export default function AdoptionForm(
                         }}
                        
                       >
-                        Apply for Adaption
+                        Apply for Adoption
                       </Button>
 
                     </Grid>

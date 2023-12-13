@@ -18,8 +18,7 @@ const Home = () => {
           sm: 5,
           md: 2,
         },
-        background: `url(${require("/home/zeycan/Desktop/cloudMain/petadoptionmetuncc/src/assets/animals.gif")}) center/cover no-repeat`,
-        
+        background: `url(${require("../assets/ezgif.com-animated-gif-maker.gif")}) center/cover no-repeat`,
         minHeight: "1000px",
         borderRadius: {
           xs: "0px 0px 27px 27px",

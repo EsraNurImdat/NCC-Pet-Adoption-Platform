@@ -12,16 +12,6 @@ import Register from './Pages/RegisterPage';
 import AdoptionForm from './Pages/AdoptionForm';
 import Home from './Pages/Home';
 
-
-
-
-
-
-
-
-
-
-
 function App() {
   
   return (
