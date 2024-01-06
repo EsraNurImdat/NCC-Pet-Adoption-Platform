@@ -14,7 +14,6 @@ import AppBarFunction from './AppBar';
 import PetsIcon from '@mui/icons-material/Pets';
 import { Link as RouterLink } from "react-router-dom";
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 const cards = [
   {
     id: 1,

@@ -8,9 +8,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Link } from "react-router-dom";
-import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
-import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivismOutlined';
 import PetsIcon from '@mui/icons-material/Pets';
+//It creates a bar that will be displayed on the aniaml page that the admin can see and directs to the necessary pages.
 const customTheme = createTheme({
     palette: {
       primary: {
@@ -18,37 +17,21 @@ const customTheme = createTheme({
       },
     },
   });
-  export default function AppBarFunction() {
+  export default function AdminAnimalAppBarFunction() {
    
     return (
       <ThemeProvider theme={customTheme}>
         <CssBaseline />
         <AppBar position="static">
         <Toolbar>
-       
-        <ListItemButton component={Link} to="/userInfo">
-          <ListItemIcon>
-            <SentimentSatisfiedAltOutlinedIcon/>
-          </ListItemIcon>
-          <ListItemText primary="User" />
-        </ListItemButton>
-  
-        <ListItemButton component={Link} to="/animal">
+    
+        <ListItemButton component={Link} to="/admin">
           <ListItemIcon>
             <PetsIcon/>
           </ListItemIcon>
-          <ListItemText primary="Animals" />
+          <ListItemText primary="Admin" />
         </ListItemButton>
-       
-        <ListItemButton component={Link} to="/adoptionform">
-          <ListItemIcon>
-            <VolunteerActivismOutlinedIcon/>
-          </ListItemIcon>
-          <ListItemText primary="Adoption Form" />
-        </ListItemButton>
-  
-        
-  
+   
         <ListItemButton >
           <ListItemIcon>
             <LogoutIcon />
