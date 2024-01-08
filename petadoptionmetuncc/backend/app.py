@@ -81,10 +81,15 @@ def login():
             return jsonify({'message': 'Please fill out the form!'}), 400
 
         if user:
+            user_email = user[0]
+
             user_password = user[3]
             password_rs = user_password
             if password.__eq__(password_rs):
-                return jsonify({'message': 'Login successful'}), 200
+                if user_email == "admin@admin.com":
+                    return jsonify({'message': 'admin'}), 200
+                else:
+                    return jsonify({'message': 'Login successful'}), 200
             else:
                 return jsonify({'message': 'Incorrect password'}), 400
         else:

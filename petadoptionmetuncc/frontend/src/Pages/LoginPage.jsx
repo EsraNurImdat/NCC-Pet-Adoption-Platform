@@ -54,8 +54,12 @@ export default function SignInSide() {
   
       axios.post('http://localhost:5000/login', data)
         .then(function (response) {
-          console.log(response);
-          navigate("/animal");
+          console.log(response.data.message);
+          if(response.data.message =="admin"){
+            navigate("/admin");}
+          else{
+            navigate("/animal")
+          }
         })
         .catch(function (error) {
           console.log(error.response);
