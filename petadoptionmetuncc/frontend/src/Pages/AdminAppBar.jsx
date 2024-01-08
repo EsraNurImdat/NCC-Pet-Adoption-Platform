@@ -32,7 +32,7 @@ const customTheme = createTheme({
           <ListItemText primary="Animals" />
         </ListItemButton>
    
-        <ListItemButton >
+        <ListItemButton component={Link} to="/">
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>

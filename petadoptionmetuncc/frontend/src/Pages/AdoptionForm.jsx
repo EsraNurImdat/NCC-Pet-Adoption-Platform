@@ -17,6 +17,9 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import PetsIcon from '@mui/icons-material/Pets';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AppBarFunction from "./AppBar";
+import {useNavigate} from "react-router-dom";
+import { useState } from 'react';
+import axios  from 'axios';
 
 const customTheme = createTheme({
     palette: {
@@ -39,19 +42,54 @@ const customTheme = createTheme({
 
 export default function AdoptionForm(
 ) {
+  
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phonenumber: "",
+    address: "",
+    animalID: "",
+  });
+
+  const navigate = useNavigate();
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      phonenumber: data.get('phonenumber'),
-      address: data.get('address'),
-      animalname: data.get('animalname'),
-      
-    });
+    const data = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phonenumber: formData.phonenumber,
+      address: formData.address,
+      animalID: formData.animalID,
+    };
+
+    axios.post('http://localhost:5000/application', data)
+      .then(function (response) {
+        console.log(response);
+        alert(response.data.message)
+        navigate("/animal");
+
+      })
+      .catch(function (error) {
+        console.log(error.response.data);
+        alert(error.response.data.message)
+      });
+
+
   };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+ 
 
 
   return (
@@ -98,7 +136,8 @@ export default function AdoptionForm(
                             </InputAdornment> 
                           ),
                         }}
-                    
+                        onChange={handleChange}
+                        value={formData.firstName}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -119,7 +158,8 @@ export default function AdoptionForm(
                             </InputAdornment> //buraya bak
                           ),
                         }}
-                       
+                        onChange={handleChange}
+                        value={formData.lastName}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -139,6 +179,8 @@ export default function AdoptionForm(
                             </InputAdornment>
                           ),
                         }}
+                        onChange={handleChange}
+                        value={formData.email}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -158,6 +200,8 @@ export default function AdoptionForm(
                             </InputAdornment> 
                           ),
                         }}
+                        onChange={handleChange}
+                        value={formData.phonenumber}
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -177,6 +221,8 @@ export default function AdoptionForm(
                             </InputAdornment> 
                           ),
                         }}
+                        onChange={handleChange}
+                        value={formData.address}
                       />
                     </Grid>
 
@@ -197,6 +243,8 @@ export default function AdoptionForm(
                             </InputAdornment> 
                           ),
                         }}
+                        onChange={handleChange}
+                        value={formData.animalID}
                       />
                     </Grid>
 

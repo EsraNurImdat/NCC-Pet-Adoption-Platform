@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from "react";
 import { Button, Link } from "@mui/material";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -11,38 +11,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PetsIcon from '@mui/icons-material/Pets';
-import { Link as RouterLink } from "react-router-dom";
-import AdminAnimalAppBarFunction from './AdminAnimalAppBar';
-//It is the admin page where a user, when logged in as an admin, can view information about animals.
-const cards = [
-  {
-    id: 1,
-    image: 'https://pet-image-bucket.s3.amazonaws.com/Kakao.jpeg',
-    title: 'Kakao',
-    gender: "Male",
-    age: "2",
-    info:  "Friendly dog who loves to play"
 
-   
-  },
-  {
-    id: 2,
-    image: 'https://pet-image-bucket.s3.amazonaws.com/Fluffy.jpeg',
-    title: 'Fluffy',
-    gender: "Female",
-    age: "3",
-    info:  "A playful cat with a fluffy coat."
-  },
-  {
-    id: 3,
-    image: 'https://pet-image-bucket.s3.amazonaws.com/Beyaz.jpeg',
-    title: 'Beyaz',
-    gender: "Male",
-    age: "1",
-    info:  "Adorable kitten with white whiskers."
-  },
-  
-];
+import AdminAnimalAppBarFunction from './AdminAnimalAppBar';
+
+import axios  from 'axios';
+//It is the admin page where a user, when logged in as an admin, can view information about animals.
+
 
 const customTheme = createTheme({
   palette: {
@@ -70,7 +44,22 @@ const customTheme = createTheme({
 
 export default function AdminAnimal() {
 
+  const [petsList, setPetsList] = useState([]);
+  const fetchData = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/show');
+      console.log(response.data.pets);
+      setPetsList(response.data.pets)
+
+    } catch (error) {
+      console.log(error.response);
+      alert(error.response.data.message);
+    }
+  };
   
+  React.useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <ThemeProvider theme={customTheme}>
@@ -87,16 +76,16 @@ export default function AdminAnimal() {
         </Box>
         <Container sx={{ py: 8 }} maxWidth="lg">
           <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card.id} xs={12} sm={6} md={4}>
+          {petsList.map((pet) => (
+              <Grid item key={pet.petID} xs={12} sm={6} md={4}>
                 <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <CardMedia
                     component="div"
                     sx={{
                       // 16:9
-                      pt: '56.25%',
+                      pt: '105%',
                     }}
-                    image={card.image}
+                    image={pet.pet_img}
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                   <Typography
@@ -108,22 +97,16 @@ export default function AdminAnimal() {
                       sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     >
                       <PetsIcon sx={{ marginRight: 1 }} />
-                      {card.title}
+                      {pet.petName}
                     </Typography>
                     <Typography>
-                    <p><strong>Animal ID:</strong> {card.id}</p>
-                    <p><strong>Gender:</strong> {card.gender}</p>
-                    <p><strong>Age:</strong> {card.age}</p>
-                    <p><strong>Details:</strong> {card.info}</p>
+                    <p><strong>Animal ID:</strong> {pet.petID}</p>
+                    <p><strong>Gender:</strong> {pet.gender}</p>
+                    <p><strong>Age:</strong> {pet.age}</p>
+                    <p><strong>Details:</strong> {pet.info}</p>
                     </Typography>
                   </CardContent>
-                  <CardActions>
                  
-                  <Link component={RouterLink} to="/adoptionform" > 
-                  </Link>
-                 
-                
-                  </CardActions>
                 </Card>
               </Grid>
             ))}

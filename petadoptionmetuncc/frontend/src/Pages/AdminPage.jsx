@@ -11,7 +11,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import AdminAppBarFunction from "./AdminAppBar";
-
+import {useNavigate} from "react-router-dom";
+import axios  from 'axios';
 //The Admin Page is a page that displays all adoption forms received by users with the admin role. 
 //On this page, the admin can view all the forms and either approve or reject them.
 
@@ -26,66 +27,82 @@ const customTheme = createTheme({
 });
 
 const AdminPage = () => {
-  const [adoptionForms, setAdoptionForms] = useState([]);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phonenumber: "",
-    address: "",
-    animalID: "",
-  });
-  // Sample data for the table
-  const TableInformation = [
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-    { id: 1, firstName: 'Name 1', lastName: "LName ", email:"example@metu.edu", phoneNo:"123", address: "aa", petid:"1"},
-  ];
+  const [fIds, setFIds] = useState([]);
+  const [fNames, setFnames] = useState([]);
+  const [lNames, setLnames] = useState([]);
+  const [emails, setEmails] = useState([]);
+  const [phoneNums, setPnums] = useState([]);
+  const [adrs, setAddrs] = useState([]);
+  const [aIds, setAids] = useState([]);
+  const [responseM, setRm] = useState([]);
 
-  const handleFormSubmission = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
-    setFormData({
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
-      email: data.get("email"),
-      phonenumber: data.get("phonenumber"),
-      address: data.get("address"),
-      animalID: data.get("animalID"),
-    });
-
+  const navigate = useNavigate();
+  const fetchData = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/apply');
+      console.log(response.data);
+  
+      setFIds(response.data.formId);
+      setAddrs(response.data.address);
+      setFnames(response.data.firstName);
+      setLnames(response.data.lastName);
+      setEmails(response.data.userEmail);
+      setPnums(response.data.phoneNum);
+      setAids(response.data.petID);
+    } catch (error) {
+      console.log(error.response);
+      alert(error.response.data.message);
+    }
   };
+  
+  React.useEffect(() => {
+    fetchData();
+  }, []);
+  React.useEffect(() => {
+    fetchData();
+  }, [responseM]);
+ 
+ 
+  
+
+ 
    
-  const handleDelete = () => {
+  const handleReject = (formId) => {
+    
+    const data = {
+      delId: formId,
+    };
+    axios.post('http://localhost:5000/deleteForm',data)
+    .then(function (response) {
+      console.log(response);
+      setRm(response.data.message)
+      alert(response.data.message)
+    })
+    .catch(function (error) {
+      console.log(error.response.data);
+      alert(error.response.data.message)
+    });
 
    
  };
 
- const handleEdit = () => {
+ const handleAccept = (pId) => {
 
-  
+  const data = {
+    pId: pId,
+  };
+  axios.post('http://localhost:5000/deleteanimal',data)
+  .then(function (response) {
+    console.log(response);
+    setRm(response.data.message)
+    alert(response.data.message)
+    navigate("/adminanimal");
+  })
+  .catch(function (error) {
+    console.log(error.response.data);
+    alert(error.response.data.message)
+  });
+
    
  };
   return (
@@ -103,7 +120,7 @@ const AdminPage = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ fontWeight: 'bold' }}>Application ID:</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>Form Id:</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>First Name:</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Last Name:</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Email:</TableCell>
@@ -113,23 +130,24 @@ const AdminPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {TableInformation.map((info) => (
-                <TableRow key={info.id}>
-                  <TableCell>{info.id}</TableCell>
-                  <TableCell>{info.firstName}</TableCell>
-                  <TableCell>{info.lastName}</TableCell>
-                  <TableCell>{info.email}</TableCell>
-                  <TableCell>{info.phoneNo}</TableCell>
-                  <TableCell>{info.address}</TableCell>
-                  <TableCell>{info.petid}</TableCell>
+              {emails.map((email,index) => (
+                <TableRow key={index}>
+                  <TableCell>{fIds[index]}</TableCell>
+                  <TableCell>{fNames[index]}</TableCell>
+                  <TableCell>{lNames[index]}</TableCell>
+                  <TableCell>{emails[index]}</TableCell>
+                  <TableCell>{phoneNums[index]}</TableCell>
+                  <TableCell>{adrs[index]}</TableCell>
+                  <TableCell>{aIds[index]}</TableCell>
+                
             
                   <TableCell>
-                    <Button variant="contained" size="small" sx={{ mt: 3, mb: 2, ":hover": { bgcolor: "#66bb6a" } }} onClick={() => handleEdit(info.id)}>
-                      Accept
+                    <Button variant="contained" size="small" sx={{ mt: 3, mb: 2, ":hover": { bgcolor: "#66bb6a" } }} onClick={() => handleAccept(aIds[index])}>
+                      Accept  
                     </Button>
                   </TableCell>
                   <TableCell>
-                    <Button variant="contained" size="small" sx={{ mt: 3, mb: 2, ":hover": { bgcolor: "#d50000" } }}  onClick={() => handleDelete(info.id)}>
+                    <Button variant="contained" size="small" sx={{ mt: 3, mb: 2, ":hover": { bgcolor: "#d50000" } }}  onClick={() => handleReject(fIds[index])}>
                       Reject
                     </Button>
                   </TableCell>
@@ -142,28 +160,13 @@ const AdminPage = () => {
          
             </Box>
           </Container>
-          <AdoptionFormList forms={adoptionForms} />
+         
         
       </Box>
     </ThemeProvider>
   );
 };
 
-const AdoptionFormList = ({ forms }) => {
-  return (
-    <div>
-      {forms.map((form, index) => (
-        <div key={index}>
-          <p>First Name: {form.firstName}</p>
-          <p>Last Name: {form.lastName}</p>
-          <p>Email: {form.email}</p>
-          <p>Phone number: {form.phonenumber}</p>
-          <p>Address: {form.address}</p>
-          <p>ID of pet: {form.animalID}</p>
-        </div>
-      ))}
-    </div>
-  );
-};
+
 
 export default AdminPage;
