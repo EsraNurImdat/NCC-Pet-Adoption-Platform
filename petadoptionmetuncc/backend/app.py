@@ -21,7 +21,7 @@ db = SQLAlchemy(app)
 
 CORS(app) 
 
-
+emailForUser = ""
 
 @app.route('/')
 def home():
@@ -99,7 +99,56 @@ def showanimals():
         }), 200
     else:
         return jsonify({'message': 'Error retrieving pets information!'}), 500
+
+@app.route('/getUser', methods=['POST'])
+def getUser():
+    global emailForUser
+    email = emailForUser
+    print("email",email)
+    query = text("SELECT * FROM users WHERE email = :email")
+    result = db.session.execute(query, {"email": email})
+    user = result.fetchone()
+    user_dict = {
+        'email': user[0],
+        'fName': user[1],
+        'lName': user[2],
+        'pwd': user[3],
+    }  
+    print("user",user)
+    query2 = text("SELECT * FROM  adoption WHERE userEmail = :email")
+    result2 = db.session.execute(query2, {"email": email})
+    adoption_data = result2.fetchall()
+  
+    formIds = []
+    first_names = []
+    last_names = []
+    user_emails = []
+    phone_nums = []
+    pet_ids = []
+    addresses = []
+    if adoption_data:
+        for row in adoption_data:
+            formIds.append(row[0])
+            first_names.append(row[1])
+            last_names.append(row[2])
+            user_emails.append(row[3])
+            phone_nums.append(row[4])
+            pet_ids.append(row[5])
+            addresses.append(row[6])
    
+    if user and adoption_data:
+        return jsonify({
+            'user': user_dict,
+            'formId': formIds,
+            'firstName': first_names,
+            'lastName': last_names,
+            'userEmail': user_emails,
+            'phoneNum': phone_nums,
+            'petID': pet_ids,
+            'address': addresses
+        }), 200
+    else:
+        return jsonify({'message': 'Error retrieving information!'}), 500
 
 @app.route('/apply', methods=['POST'])
 def apply():
@@ -211,6 +260,9 @@ def login():
                 if user_email == "admin@admin.com":
                     return jsonify({'message': 'admin'}), 200
                 else:
+                    global emailForUser
+                    emailForUser = emailForUser + email
+                    print(emailForUser)
                     return jsonify({'message': 'Login successful'}), 200
             else:
                 return jsonify({'message': 'Incorrect password'}), 400
