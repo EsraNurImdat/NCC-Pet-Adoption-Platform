@@ -14,57 +14,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios  from 'axios';
 
 
-
-const columns = [
-  { id: 'name', label: 'Name', minWidth: 100 },
-  { id: 'surname', label: 'Surname', minWidth: 100 },
-  {
-    id: 'age',
-    label: 'Age',
-    minWidth: 100,
-    align: 'right',
-  },
-  {
-    id: 'email',
-    label: 'Email',
-    minWidth: 100,
-    align: 'right',
-  },
-  {
-    id: 'gender',
-    label: 'Gender',
-    minWidth: 100,
-    align: 'right',
-  },
-];
-
-  
-
-function createData(name, surname, age, email, gender) {
-  return { name, surname, age, email, gender };
-}
-
-const rows = [
-  createData('Ali', 'Yılmaz', 45, 'ali@email.com', 'Male','Müezzin Hasan Efendi Sokak No:4 Lefke'),
-  createData('Ali', 'Yılmaz', 45, 'ali@email.com','Male'),
-  createData('Ayşe', 'Yılmaz', 43, 'ayse@email.com','Female'),
-  createData('Ece', 'Güneş', 16, 'ece@email.com','Female'),
-  createData('Ahmet', 'Yıldız', 78, 'ahmet@email.com','Male'),
-  createData('Selin', 'Demir', 19, 'selin@email.com','Female'),
-  createData('Mehmet', 'Yeşil', 44, 'mehmet@email.com','Male'),
-  createData('Yunus', 'Alp', 45, 'yunus@email.com','Male'),
-  createData('İbrahim', 'Yılmaz', 63, 'ibrahim@email.com','Male'),
-  createData('Zeynep', 'Yıldız', 58, 'zeynep@email.com','Female'),
-  createData('Begüm', 'Güneş', 25, 'begüm@email.com','Female'),
-  createData('Efe', 'Demir', 33, 'efe@email.com','Male'),
-  createData('Esra', 'Yeşil', 17, 'esra@email.com','Female'),
-  createData('Emre', 'Sarı', 21, 'emre@email.com','Male'),
-  createData('Cemre', 'Mavi', 18, 'cemre@email.com','Female'),
-  createData('Zeki', 'Alp', 15, 'zeki@email.com','Male'),
-  createData('NUr', 'Alp', 10, 'nur@email.com','Female'),
-];
 const customTheme = createTheme({
   palette: {
     primary: {
@@ -85,15 +37,38 @@ const customTheme = createTheme({
   
 });
 export default function UserTable() {
-    const userInformation = [
-      { label: 'First Name', value: "firstName" },
-      { label: 'Last Name', value: "lastName" },
-      { label: 'Age', value: "age" },
-      { label: 'Email', value: "email" },
-      { label: 'Gender', value: "gender" },
-      { label: 'Address', value: "address" },
-    ];
+  const [userInfo, setUserInfo] = useState([]);
+  const [fIds, setFIds] = useState([]);
+  const [fNames, setFnames] = useState([]);
+  const [lNames, setLnames] = useState([]);
+  const [emails, setEmails] = useState([]);
+  const [phoneNums, setPnums] = useState([]);
+  const [adrs, setAddrs] = useState([]);
+  const [aIds, setAids] = useState([]);
+  const fetchData = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/getUser');
+      console.log(response.data.user);
+      setUserInfo(response.data.user)
+
+      setFIds(response.data.formId);
+      setAddrs(response.data.address);
+      setFnames(response.data.firstName);
+      setLnames(response.data.lastName);
+      setEmails(response.data.userEmail);
+      setPnums(response.data.phoneNum);
+      setAids(response.data.petID);
+
+    } catch (error) {
+      console.log(error.response);
+      alert(error.response.data.message);
+    }
+  };
   
+  React.useEffect(() => {
+    fetchData();
+  }, []);
+
     return ( <Box sx={{backgroundImage:'url("https://s.tmimgcdn.com/scr/800x500/296200/premium-vektor-arkaplan-resimleri--yuksek-kaliteli-arkaplan--modern-hd-arka-plan-goruntuleri_296286-original.jpg")',backgroundSize: 'cover',
           minHeight: '1000px',}}>
       <ThemeProvider theme={customTheme}>
@@ -111,15 +86,45 @@ export default function UserTable() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ fontWeight: 'bold' }}>Attribute</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}>Value</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>User Email</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>User Name</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>User Surname</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>User Password</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {userInformation.map((info) => (
-                <TableRow key={info.label}>
-                  <TableCell>{info.label}</TableCell>
-                  <TableCell>{info.value}</TableCell>
+                <TableRow key={userInfo.email}>
+                  <TableCell>{userInfo.email}</TableCell>
+                  <TableCell>{userInfo.fName}</TableCell>
+                  <TableCell>{userInfo.lName}</TableCell>
+                  <TableCell>{userInfo.pwd}</TableCell>
+                </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TableContainer component={Paper} style={{ width: '100%', margin: 'auto', marginTop: '20px'}}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ fontWeight: 'bold' }}>Form Id:</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>First Name:</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>Last Name:</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>Email:</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>Phone Number:</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>Address:</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>Pet ID:</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {emails.map((email,index) => (
+                <TableRow key={index}>
+                  <TableCell>{fIds[index]}</TableCell>
+                  <TableCell>{fNames[index]}</TableCell>
+                  <TableCell>{lNames[index]}</TableCell>
+                  <TableCell>{emails[index]}</TableCell>
+                  <TableCell>{phoneNums[index]}</TableCell>
+                  <TableCell>{adrs[index]}</TableCell>
+                  <TableCell>{aIds[index]}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
